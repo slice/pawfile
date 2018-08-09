@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "pawfile"
+version = "0.1.0"
+description = ""
+authors = ["slice <ryaneft@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "*"
+flask = "^1.0"
+peewee = "^3.6"
+emoji = "^0.5.0"
