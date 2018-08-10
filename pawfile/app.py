@@ -45,7 +45,7 @@ def view(file_id):
         return '', 404
 
 
-@app.route('/files', methods=['POST'])
+@app.route('/', methods=['POST'])
 @password_required
 def upload():
     if 'file' not in request.files:
