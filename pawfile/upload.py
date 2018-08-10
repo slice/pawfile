@@ -28,6 +28,6 @@ def handle_upload(file) -> str:
         with open(path, 'wb') as file:
             file.write(content)
 
-        return digest, True
+        return digest, False
 
-    return digest, False
+    return digest, True

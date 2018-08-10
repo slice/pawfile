@@ -76,7 +76,7 @@ def upload():
     # Save the file into the filesystem if necessary by its SHA256 hash.
     hash, already_exists = handle_upload(file)
 
-    if not already_exists:
+    if already_exists:
         # Return the existing entry.
         file = File.get(File.hash == hash)
 
