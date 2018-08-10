@@ -42,7 +42,7 @@ def view(file_id):
             attachment_filename=file.name,
         )
     except File.DoesNotExist:
-        return 'File not found.', 404
+        return '', 404
 
 
 @app.route('/files', methods=['POST'])
