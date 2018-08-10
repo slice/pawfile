@@ -1,8 +1,9 @@
 __all__ = ['db', 'Model']
 
-from peewee import Model, SqliteDatabase
+from peewee import Model
+from playhouse.pool import PooledSqliteDatabase
 
-db = SqliteDatabase(None)
+db = PooledSqliteDatabase(None)
 
 
 class BaseModel(Model):
