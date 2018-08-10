@@ -15,6 +15,8 @@ app.config.from_object('pawfile.config')
 if 'CONFIG' in os.environ:
     app.config.from_envvar('CONFIG')
 
+db.init(app.config['DATABASE_PATH'])
+
 
 @app.before_request
 def before_request():

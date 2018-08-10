@@ -2,7 +2,7 @@ __all__ = ['db', 'Model']
 
 from peewee import Model, SqliteDatabase
 
-db = SqliteDatabase('files.db')
+db = SqliteDatabase(None)
 
 
 class BaseModel(Model):

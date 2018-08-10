@@ -11,3 +11,5 @@ UPLOADED_FILES = os.path.abspath(os.path.join(
 
 # Should be changed in user configurations.
 PASSWORD = os.urandom(256)
+
+DATABASE_PATH = 'files.db'
