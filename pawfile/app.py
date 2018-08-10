@@ -3,6 +3,7 @@ import mimetypes
 
 from flask import Flask, request, jsonify, send_file
 
+from . import __version__ as version
 from .decorators import password_required
 from .db import db
 from .models import File
@@ -27,6 +28,11 @@ def before_request():
 def after_request(response):
     db.close()
     return response
+
+
+@app.route('/')
+def index():
+    return jsonify(dict(version=version))
 
 
 @app.route('/<file_id>', methods=['GET'])
