@@ -45,6 +45,19 @@ def view(file_id):
         return '', 404
 
 
+@app.route('/<selector>', methods=['DELETE'])
+@password_required
+def delete(selector):
+    try:
+        file = File.get(
+            (File.hash == selector) | (File.id == selector)
+        )
+        file.delete()
+        return '', 204
+    except File.DoesNotExist:
+        return jsonify(dict(error='file not found')), 404
+
+
 @app.route('/', methods=['POST'])
 @password_required
 def upload():
