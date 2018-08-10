@@ -52,7 +52,7 @@ def delete(selector):
         file = File.get(
             (File.hash == selector) | (File.id == selector)
         )
-        file.delete()
+        file.delete_instance()
         return '', 204
     except File.DoesNotExist:
         return jsonify(dict(error='file not found')), 404
