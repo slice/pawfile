@@ -38,8 +38,6 @@ def view(file_id):
 
         return send_file(
             filename_or_fp=path,
-            as_attachment=True,
-            attachment_filename=file.name,
         )
     except File.DoesNotExist:
         return '', 404
