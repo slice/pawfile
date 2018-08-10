@@ -26,7 +26,7 @@ def after_request(response):
     return response
 
 
-@app.route('/<file_id>')
+@app.route('/<file_id>', methods=['GET'])
 def view(file_id):
     try:
         file = File.get(File.id == file_id)
@@ -60,9 +60,17 @@ def upload():
         file.content_type,
     )
 
-    # Save the file into the filesystem if necessary
-    # by its SHA256 hash, and return the hash.
-    hash = handle_upload(file)
+    # Save the file into the filesystem if necessary by its SHA256 hash.
+    hash, already_exists = handle_upload(file)
+
+    if not already_exists:
+        # Return the existing entry.
+        file = File.get(File.hash == hash)
+
+        return jsonify({
+            **file.to_dict(),
+            'existing': True
+        })
 
     file_id = generate_name(5)
 
@@ -72,8 +80,4 @@ def upload():
         hash=hash,
     )
 
-    return jsonify({
-        'id': file.id,
-        'name': file.name,
-        'hash': file.hash,
-    })
+    return jsonify(file.to_dict())
