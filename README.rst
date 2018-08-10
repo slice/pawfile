@@ -10,6 +10,13 @@ Features
 * File deletion
 * Basic password authentication via ``Authorization`` header
 
+Missing Features
+~~~~~~~~~~~~~~~~
+
+* Caching (!!!)
+* File editing
+* Multiple users
+
 Setting up
 ----------
 
