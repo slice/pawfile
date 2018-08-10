@@ -6,6 +6,7 @@ from .db import BaseModel
 class File(BaseModel):
     id = CharField(primary_key=True)
     name = CharField()
+    mime = CharField()
     hash = CharField()
 
     def to_dict(self):

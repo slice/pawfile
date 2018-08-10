@@ -1,4 +1,5 @@
 import os
+import mimetypes
 
 from flask import Flask, request, jsonify, send_file
 
@@ -38,6 +39,7 @@ def view(file_id):
 
         return send_file(
             filename_or_fp=path,
+            mimetype=file.mime,
         )
     except File.DoesNotExist:
         return '', 404
@@ -63,12 +65,15 @@ def upload():
         return jsonify(error='no file provided'), 400
 
     file = request.files['file']
+    filename = file.filename
+    guessed_mime = mimetypes.guess_type(filename, strict=False)[0]
+    mime = guessed_mime or file.content_type
 
     app.logger.info(
         'Creating file. name=%s, length=%d, mime=%s',
-        file.filename,
+        filename,
         file.content_length,
-        file.content_type,
+        mime,
     )
 
     # Save the file into the filesystem if necessary by its SHA256 hash.
@@ -89,6 +94,7 @@ def upload():
         id=file_id,
         name=file.filename,
         hash=hash,
+        mime=mime,
     )
 
     return jsonify(file.to_dict())
