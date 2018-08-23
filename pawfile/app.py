@@ -9,7 +9,7 @@ from .decorators import password_required
 from .db import db
 from .models import File
 from .name import generate_name
-from .upload import handle_upload
+from .upload import read_buffer, hash_buffer, hash_exists, write_file
 
 app = Flask(__name__)
 app.config.from_object('pawfile.config')
@@ -95,17 +95,20 @@ def upload():
         mime,
     )
 
-    # Save the file into the filesystem if necessary by its SHA256 hash.
-    hash, already_exists = handle_upload(file)
+    buffer = read_buffer(file)
+    hash = hash_buffer(buffer)
 
-    if already_exists:
-        # Return the existing entry.
+    if hash_exists(hash):
+        # Return the existing entry instead of writing a new file.
         file = File.get(File.hash == hash)
 
         return jsonify({
             **file.to_dict(),
-            'existing': True
+            'deduplicated': True,
         })
+    else:
+        # Save the file into the filesystem if necessary.
+        write_file(hash, buffer)
 
     file_id = generate_name(5)
 
