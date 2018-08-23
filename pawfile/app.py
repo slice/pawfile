@@ -1,5 +1,6 @@
 import os
 import mimetypes
+import urllib.parse
 
 from flask import Flask, request, jsonify, send_file, make_response
 
@@ -45,14 +46,18 @@ def view(file_id):
             file.hash,
         )
 
-        # Remove any characters that might break the Content-Disposition header.
-        filename = file.name.replace('"', '_')
+        # Properly escape the filename for the Content-Disposition header.
+        filename = urllib.parse.quote_plus(file.name)
 
         resp = make_response(send_file(
             filename_or_fp=path,
             mimetype=file.mime,
         ))
-        resp.headers['Content-Disposition'] = f'inline; filename="{filename}"'
+
+        resp.headers['Content-Disposition'] = (
+            # Yes, this is quite odd. Blame backwards compatibility.
+            f"inline; filename*=UTF-8''{filename}"
+        )
 
         return resp
     except File.DoesNotExist:
