@@ -1,7 +1,7 @@
 import os
 import mimetypes
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, make_response
 
 from . import __version__ as version
 from .decorators import password_required
@@ -45,10 +45,16 @@ def view(file_id):
             file.hash,
         )
 
-        return send_file(
+        # Remove any characters that might break the Content-Disposition header.
+        filename = file.name.replace('"', '_')
+
+        resp = make_response(send_file(
             filename_or_fp=path,
             mimetype=file.mime,
-        )
+        ))
+        resp.headers['Content-Disposition'] = f'inline; filename="{filename}"'
+
+        return resp
     except File.DoesNotExist:
         return '', 404
 
