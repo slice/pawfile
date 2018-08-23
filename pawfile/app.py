@@ -14,6 +14,8 @@ from .upload import read_buffer, hash_buffer, hash_exists, write_file
 app = Flask(__name__)
 app.config.from_object('pawfile.config')
 
+# Load a configuration from the CONFIG environment variable.  It is a filename
+# of a .py file which is loaded.
 if 'CONFIG' in os.environ:
     app.config.from_envvar('CONFIG')
 
@@ -85,6 +87,9 @@ def upload():
 
     file = request.files['file']
     filename = file.filename
+
+    # Determine the file's MIME from its filename, falling back to the one
+    # provided by the uploader.
     guessed_mime = mimetypes.guess_type(filename, strict=False)[0]
     mime = guessed_mime or file.content_type
 

@@ -8,16 +8,16 @@ import typing
 from flask import current_app as app
 
 
-def read_buffer(file) -> typing.BinaryIO:
-    """Return a Werkzeug file attachment as a BinaryIO."""
+def read_buffer(file) -> typing.ByteString:
+    """Return a Werkzeug file attachment as bytes."""
     with io.BytesIO() as buffer:
         file.save(buffer)
         buffer.seek(0)
         return buffer.read()
 
 
-def hash_buffer(buffer: typing.BinaryIO) -> str:
-    """Return the SHA256 hash of a buffer."""
+def hash_buffer(buffer: typing.ByteString) -> str:
+    """Return the SHA256 hash of bytes."""
     return hashlib.sha256(buffer).hexdigest()
 
 
@@ -28,7 +28,7 @@ def hash_exists(hash: str) -> bool:
     return os.path.isfile(path)
 
 
-def write_file(hash: str, buffer: typing.BinaryIO):
+def write_file(hash: str, buffer: typing.ByteString):
     """Write a file to the files directory using its hash as a filename."""
     file_directory = app.config['UPLOADED_FILES']
     path = os.path.join(file_directory, hash)
